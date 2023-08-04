@@ -12,12 +12,9 @@ class CategoriesScreen extends StatelessWidget {
   final void Function(Meal meal) toggleFavo;
 
   void _selectedCategory(BuildContext context, Category category) {
-    final List<Meal> mealsByCategory = meals
-        .where((element) => element.categories.contains(category.id))
-        .toList();
+    final List<Meal> mealsByCategory = meals.where((m) => m.categories.contains(category.id)).toList();
     Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) =>
-          MealsScreen(category.title, mealsByCategory, toggleFavo),
+      builder: (context) => MealsScreen(category.title, mealsByCategory, toggleFavo),
     ));
   }
 
@@ -36,9 +33,7 @@ class CategoriesScreen extends StatelessWidget {
           CategoryGridItem(
             c.title,
             c.color,
-            () {
-              _selectedCategory(context, c);
-            },
+            () => _selectedCategory(context, c),
           )
       ],
     );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
-import './meal_item_lable.dart';
 
 class MealItem extends StatelessWidget {
   const MealItem(this.meal, this.selectedMeal, {super.key});
@@ -43,9 +42,17 @@ class MealItem extends StatelessWidget {
                     bottomRight: Radius.circular(16),
                   ),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: MealItemLable(const Icon(Icons.schedule), meal.duration),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.schedule),
+                    const SizedBox(width: 8),
+                    Text(
+                      meal.duration,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    )
+                  ],
+                ),
               ),
             ),
             Container(
@@ -56,8 +63,8 @@ class MealItem extends StatelessWidget {
                 meal.title,
                 style: TextStyle(
                   fontSize: 20,
-                  color: Theme.of(context).colorScheme.primary,
                   letterSpacing: 2,
+                  color: Theme.of(context).colorScheme.onBackground,
                 ),
                 textAlign: TextAlign.center,
               ),

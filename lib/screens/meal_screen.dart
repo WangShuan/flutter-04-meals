@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
-import '../widgets/meal_item_lable.dart';
 
 class MealScreen extends StatelessWidget {
   const MealScreen(this.meal, this.toggleFavo, {super.key});
@@ -18,10 +17,9 @@ class MealScreen extends StatelessWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-              onPressed: () {
-                toggleFavo(meal);
-              },
-              icon: const Icon(Icons.favorite_border))
+            onPressed: () => toggleFavo(meal),
+            icon: const Icon(Icons.favorite_border),
+          )
         ],
       ),
       body: SafeArea(
@@ -52,72 +50,48 @@ class MealScreen extends StatelessWidget {
                           bottomLeft: Radius.circular(16),
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      child: MealItemLable(
-                          const Icon(Icons.schedule), meal.duration),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Text(
-                '材料',
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Wrap(
-                alignment: WrapAlignment.center,
-                children: [
-                  for (final e in meal.ingredients)
-                    Text(
-                      meal.ingredients.last == e ? e : '$e、',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ),
-                    )
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Text(
-                '製作方式',
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              for (final (index, e) in meal.steps.indexed)
-                Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  ),
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: Text(
-                        '${index + 1}',
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.schedule),
+                          const SizedBox(width: 8),
+                          Text(meal.duration, style: Theme.of(context).textTheme.bodyMedium),
+                        ],
                       ),
                     ),
-                    title: Text(
-                      e,
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.onPrimary,
-                          ),
-                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              Text('材料', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Wrap(
+                  spacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for (final item in meal.ingredients)
+                      Text(
+                        meal.ingredients.last == item ? item : '$item、',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      )
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text('製作方式', style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 8),
+              for (final (index, step) in meal.steps.indexed)
+                Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  ),
+                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  child: ListTile(
+                    leading: CircleAvatar(child: Text('${index + 1}')),
+                    title: Text(step, style: Theme.of(context).textTheme.bodyMedium),
                   ),
                 ),
             ],

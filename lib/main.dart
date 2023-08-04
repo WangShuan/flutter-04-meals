@@ -5,22 +5,27 @@ import './screens/tabs_screen.dart';
 
 void main() => runApp(const MyApp());
 
-final theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.dark,
-    seedColor: Colors.red,
-  ),
-  useMaterial3: true,
-  textTheme: GoogleFonts.mochiyPopPOneTextTheme(),
-);
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: theme,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.indigo,
+          brightness: Brightness.dark,
+        ),
+        primaryColor: Colors.indigo,
+        brightness: Brightness.dark,
+        useMaterial3: true,
+        textTheme: GoogleFonts.mochiyPopPOneTextTheme(Theme.of(context).textTheme).copyWith(
+          bodyMedium: GoogleFonts.mochiyPopPOne(color: Colors.indigo[50], fontSize: 16),
+          headlineMedium: GoogleFonts.mochiyPopPOne(color: Colors.white70),
+          headlineSmall: GoogleFonts.mochiyPopPOne(color: Colors.white, fontSize: 20),
+          titleLarge: GoogleFonts.mochiyPopPOne(color: Colors.indigo[100]),
+        ),
+      ),
       home: const TabsScreen(),
     );
   }

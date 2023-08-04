@@ -46,8 +46,7 @@ const meals = [
     id: 'm1',
     title: '鯖魚筍湯麵',
     categories: ['c2'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2019/11/19/18/34/food-4638227_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2019/11/19/18/34/food-4638227_1280.jpg',
     ingredients: [
       '茄汁鯖魚罐頭',
       '香筍罐頭',
@@ -61,7 +60,7 @@ const meals = [
       '開中大火煮到水滾後，加入麵條',
       '轉中小火，視麵條種類煮約三～五分鐘',
       '待麵條軟度可食用後，加入蔬菜',
-      '蔬菜熟後即可關火上桌'
+      '蔬菜熟後即可關火上桌',
     ],
     duration: '15分鐘',
     isGlutenFree: false,
@@ -73,8 +72,7 @@ const meals = [
     id: 'm2',
     title: '蔬菜鮪魚粥',
     categories: ['c1', 'c6'],
-    imgUrl:
-        'https://d189djjbmcrkk.cloudfront.net/tinymce/ysFXWkBtuxewWJcb3OamITqjoJm5wIj0AERVxsva.jpeg',
+    imgUrl: 'https://d189djjbmcrkk.cloudfront.net/tinymce/ysFXWkBtuxewWJcb3OamITqjoJm5wIj0AERVxsva.jpeg',
     ingredients: [
       '鮪魚罐頭',
       '玉米筍一盒',
@@ -99,8 +97,7 @@ const meals = [
     id: 'm3',
     title: '紅醬牛奶',
     categories: ['c7', 'c4'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2018/02/23/16/58/milk-3176015_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2018/02/23/16/58/milk-3176015_1280.jpg',
     ingredients: [
       '草莓果醬少許',
       '紅蘿蔔四分之一條',
@@ -123,8 +120,7 @@ const meals = [
     id: 'm4',
     title: '綠果汁',
     categories: ['c4'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2015/07/19/22/37/bottle-852133_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2015/07/19/22/37/bottle-852133_1280.jpg',
     ingredients: [
       '任意三種或以上的綠色蔬果',
       '飲用水',
@@ -145,8 +141,7 @@ const meals = [
     id: 'm5',
     title: '洋蔥鮪魚沙拉',
     categories: ['c3', 'c6'],
-    imgUrl:
-        'https://cdn.cybassets.com/s/files/9949/ckeditor/pictures/content_b5149357-fd33-4cec-98a9-3714050d281b.jpg',
+    imgUrl: 'https://cdn.cybassets.com/s/files/9949/ckeditor/pictures/content_b5149357-fd33-4cec-98a9-3714050d281b.jpg',
     ingredients: [
       '水煮鮪魚罐頭',
       '洋蔥一顆',
@@ -158,7 +153,7 @@ const meals = [
       '用飲用水來回沖洗洋蔥三次，去除辛辣味',
       '放入冰塊及飲用水淹過洋蔥浸泡十五分鐘',
       '加入鮪魚罐頭及調味用的適量醬油',
-      '攪拌均勻後即可食用'
+      '攪拌均勻後即可食用',
     ],
     duration: '30分鐘',
     isGlutenFree: true,
@@ -170,8 +165,7 @@ const meals = [
     id: 'm6',
     title: '泡菜豆腐鍋',
     categories: ['c6'],
-    imgUrl:
-        'https://cdn.ready-market.com/106/3d1b21f4//Templates/pic/Kimchi%20Tofu%20Hot%20Pot.jpg?v=172c5bc3',
+    imgUrl: 'https://cdn.ready-market.com/106/3d1b21f4//Templates/pic/Kimchi%20Tofu%20Hot%20Pot.jpg?v=172c5bc3',
     ingredients: [
       '愛之味泡菜兩罐',
       '嫩豆腐一盒',
@@ -185,7 +179,7 @@ const meals = [
       '開中小火，加入切好的豆腐',
       '水滾後加入火鍋肉片',
       '待肉片快熟時，加入切好的蔬菜',
-      '蔬菜熟後即可關火上桌'
+      '蔬菜熟後即可關火上桌',
     ],
     duration: '7分鐘',
     isGlutenFree: true,
@@ -197,8 +191,7 @@ const meals = [
     id: 'm7',
     title: '木瓜牛奶冰沙',
     categories: ['c4'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2017/03/31/16/07/smoothie-2191709_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2017/03/31/16/07/smoothie-2191709_1280.jpg',
     ingredients: [
       '木瓜',
       '牛奶',
@@ -220,10 +213,10 @@ const meals = [
     id: 'm8',
     title: '綜合果汁',
     categories: ['c4'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2020/03/20/16/48/smoothies-4951253_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2020/03/20/16/48/smoothies-4951253_1280.jpg',
     ingredients: [
       '超商或超市賣的綜合水果一盒',
+      '飲用水',
     ],
     steps: [
       '將綜合水果依序放入杯中',
@@ -240,8 +233,7 @@ const meals = [
     id: 'm9',
     title: '午餐肉夾蛋土司',
     categories: ['c5'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2016/11/18/19/00/bread-1836411_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2016/11/18/19/00/bread-1836411_1280.jpg',
     ingredients: [
       '午餐肉罐頭',
       '蛋一顆',
@@ -252,7 +244,7 @@ const meals = [
       '將午餐肉、番茄、小黃瓜切片備用',
       '將適量小黃瓜、兩片牛番茄放到吐司上',
       '熱鍋下油，煎午餐肉至金黃色、煎蛋',
-      '將午餐肉放在番茄上、蛋放最上面，即可食用'
+      '將午餐肉放在番茄上、蛋放最上面，即可食用',
     ],
     duration: '5分鐘',
     isGlutenFree: false,
@@ -264,8 +256,7 @@ const meals = [
     id: 'm10',
     title: '莓果優格麥片',
     categories: ['c5'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2016/11/21/15/53/berries-1846085_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2016/11/21/15/53/berries-1846085_1280.jpg',
     ingredients: [
       '草莓',
       '藍莓',
@@ -287,8 +278,7 @@ const meals = [
     id: 'm11',
     title: '白醬義大利麵',
     categories: ['c2'],
-    imgUrl:
-        'https://cdn.pixabay.com/photo/2015/04/06/13/28/spaghetti-709337_1280.jpg',
+    imgUrl: 'https://cdn.pixabay.com/photo/2015/04/06/13/28/spaghetti-709337_1280.jpg',
     ingredients: [
       '康寶濃湯四人份一包',
       '飲用水',
@@ -301,7 +291,7 @@ const meals = [
       '用另外一鍋倒入康寶濃湯加適量飲用水攪拌至濃稠',
       '加入切好的肉類一起攪拌',
       '在碗中放入煮好的義大利麵條',
-      '倒入煮好的醬料即可食用'
+      '倒入煮好的醬料即可食用',
     ],
     duration: '12分鐘',
     isGlutenFree: false,

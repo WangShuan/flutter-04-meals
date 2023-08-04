@@ -39,19 +39,15 @@ class MealsScreen extends StatelessWidget {
             : Center(
                 child: Text(
                   '這個類別沒有任何食譜，您可以嘗試更改篩選器。',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground),
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               )
         : Scaffold(
-            appBar: AppBar(
-              title: Text(title),
-            ),
+            appBar: AppBar(title: Text(title)),
             body: meals.isNotEmpty
                 ? GridView(
                     padding: const EdgeInsets.all(20),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
                       childAspectRatio: 1.75,
                       crossAxisSpacing: 20,
@@ -67,8 +63,7 @@ class MealsScreen extends StatelessWidget {
                 : Center(
                     child: Text(
                       '這個類別沒有任何食譜，您可以嘗試更改篩選器。',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
           );

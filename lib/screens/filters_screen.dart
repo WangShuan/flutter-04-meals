@@ -48,18 +48,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
         child: Column(
           children: [
             SwitchListTile(
-              title: Text(
-                '不含麩質',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-              subtitle: Text(
-                '篩選所有不含麩質的食譜',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
+              title: Text('不含麩質', style: Theme.of(context).textTheme.titleLarge),
+              subtitle: Text('篩選所有不含麩質的食譜', style: Theme.of(context).textTheme.bodyMedium),
               activeColor: Theme.of(context).colorScheme.primary,
               value: _isGlutenFree,
               onChanged: (value) {
@@ -69,18 +59,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
               },
             ),
             SwitchListTile(
-              title: Text(
-                '不含乳糖',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-              subtitle: Text(
-                '篩選所有不含乳糖的食譜',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
+              title: Text('不含乳糖', style: Theme.of(context).textTheme.titleLarge),
+              subtitle: Text('篩選所有不含乳糖的食譜', style: Theme.of(context).textTheme.bodyMedium),
               activeColor: Theme.of(context).colorScheme.primary,
               value: _isLactoseFree,
               onChanged: (value) {
@@ -90,18 +70,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
               },
             ),
             SwitchListTile(
-              title: Text(
-                '全素可食用',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-              subtitle: Text(
-                '篩選所有全素可食用的食譜',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
+              title: Text('全素可食用', style: Theme.of(context).textTheme.titleLarge),
+              subtitle: Text('篩選所有全素可食用的食譜', style: Theme.of(context).textTheme.bodyMedium),
               activeColor: Theme.of(context).colorScheme.primary,
               value: _isVegan,
               onChanged: (value) {
@@ -111,18 +81,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
               },
             ),
             SwitchListTile(
-              title: Text(
-                '蛋奶素可食用',
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
-              subtitle: Text(
-                '篩選所有蛋奶素可食用的食譜',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                    ),
-              ),
+              title: Text('蛋奶素可食用', style: Theme.of(context).textTheme.titleLarge),
+              subtitle: Text('篩選所有蛋奶素可食用的食譜', style: Theme.of(context).textTheme.bodyMedium),
               activeColor: Theme.of(context).colorScheme.primary,
               value: _isVegetarian,
               onChanged: (value) {

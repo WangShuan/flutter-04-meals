@@ -388,7 +388,7 @@ for (final (index, step) in meal.steps.indexed)
     ),
     title: Text(
       step,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Theme.of(context).textTheme.bodyMedium,
     ),
   ),
 ```
@@ -456,7 +456,7 @@ Wrap(
     for (final e in meal.ingredients)
       Text(
         meal.ingredients.last == e ? e : '$e、',
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
               color: Theme.of(context).colorScheme.onBackground,
             ),
       )
@@ -476,7 +476,7 @@ SwitchListTile(
   ),
   subtitle: Text( // 設置副標題
     '篩選所有不含乳糖的食譜',
-    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
           color: Theme.of(context).colorScheme.onBackground,
         ),
   ),

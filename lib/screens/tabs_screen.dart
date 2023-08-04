@@ -24,11 +24,11 @@ class _TabsScreenState extends State<TabsScreen> {
     Filter.vegetarian: false,
   };
 
-  void _showMessage(String s) {
+  void _showMessage(String msg) {
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(s),
+        content: Text(msg),
         duration: const Duration(seconds: 3),
       ),
     );
@@ -52,14 +52,14 @@ class _TabsScreenState extends State<TabsScreen> {
   void selectedScreen(String routeName) async {
     Navigator.of(context).pop();
     if (routeName == 'filters') {
-      final f = (await Navigator.of(context).push<Map<Filter, bool>>(
+      final filters = (await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
           builder: (context) => FiltersScreen(_selectedFilter),
         ),
       ))!;
 
       setState(() {
-        _selectedFilter = f;
+        _selectedFilter = filters;
       });
     } else {
       Navigator.of(context).push(MaterialPageRoute(
@@ -98,21 +98,13 @@ class _TabsScreenState extends State<TabsScreen> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category_rounded),
-            label: '所有類別',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: '喜好項目',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.category_rounded), label: '所有類別'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: '喜好項目'),
         ],
         currentIndex: _activeIndex,
         selectedItemColor: Theme.of(context).colorScheme.primary,
       ),
-      body: _activeIndex == 0
-          ? CategoriesScreen(filterMeals, toggleFavo)
-          : MealsScreen('', _favoMeals, toggleFavo),
+      body: _activeIndex == 0 ? CategoriesScreen(filterMeals, toggleFavo) : MealsScreen('', _favoMeals, toggleFavo),
     );
   }
 }
