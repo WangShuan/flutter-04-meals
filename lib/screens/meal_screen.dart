@@ -2,25 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../models/meal.dart';
+import '../widgets/meal_favorite_button.dart';
 
 class MealScreen extends StatelessWidget {
-  const MealScreen(this.meal, this.toggleFavo, {super.key});
+  const MealScreen(this.meal, {super.key});
   static String routerName = 'meal';
 
   final Meal meal;
-  final void Function(Meal meal) toggleFavo;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
-        actions: [
-          IconButton(
-            onPressed: () => toggleFavo(meal),
-            icon: const Icon(Icons.favorite_border),
-          )
-        ],
+        actions: [MealFavoriteButton(meal)],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

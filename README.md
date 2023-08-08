@@ -534,3 +534,222 @@ for (final (index, e) in meal.steps.indexed)
 - title 設置主要標題
 - subtitle 設置次要標題，會顯示在標題下方，比標題小字
 - trailing 設置右側圖標，常見放箭頭 Icon 按鈕等等
+
+## 進階 - 狀態管理 flutter_riverpod 套件
+
+### 安裝與初始化
+
+執行指令 `flutter pub add flutter_riverpod` 以進行安裝。
+
+安裝好後，修改 `main.dart` 內容，以初始化 `flutter_riverpod`：
+
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // 引入 flutter_riverpod
+
+void main() {
+  runApp(
+    const ProviderScope( // 將 MyApp 用 ProviderScope 包起來
+      child: MyApp(),
+    ),
+  );
+}
+```
+
+接著即可開始使用。
+
+### 使用方式
+
+與 material 提供的有狀態小部件與無狀態小部件一樣，在 flutter_riverpod 中，也分為 `ConsumerWidget` 與 `ConsumerStatefulWidget` 小部件兩種，分別對應原本的 `StatelessWidget` 與 `StatefulWidget` 小部件。
+
+如果是使用 `ConsumerWidget` 小部件，則須在 `Widget build(BuildContext context)` 中多新增第二個參數 `WidgetRef ref` 才能在 `Widget build` 裏面通過 `ref.watch` 或 `ref.read` 獲取 provider 。
+
+如果是使用 `ConsumerStatefulWidget` 小部件，則需將 `State` 改為 `ConsumerState` ，但無須在 `Widget build(BuildContext context)` 中新增 `ref` 參數。
+
+另外 `ref.watch()` 主要用於獲取數據資料，該方法會在每次數據產生變動時自動重新讀取更新後的資料
+
+而 `ref.read()` 則拿來呼叫 provider 裡面宣告的方法。
+
+### Provider 方法
+
+#### 直接回傳數據
+
+以 meals 來說，原先是直接使用 `/data/dummy_categories.dart` 存放的陣列資料，
+
+現在可於 `/lib` 中新增資料夾 `providers` 再新增檔案 `meals_providers.dart` 來存放 meals 資料：
+
+```dart
+import 'package:meals/data/dummy_categories.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// 基礎用法，直接通過 Provider 方法回傳 meals
+final mealsProvider = Provider((ref) => meals);
+```
+
+接著要在 `tabs_screen.dart` 中獲取 `mealsProvider` 作法如下：
+
+1. 將 `StatefulWidget` 有狀態小部件改為 `ConsumerStatefulWidget` 小部件
+
+2. 將 `State` 改為 `ConsumerState`
+
+3. 在 `Widget build(BuildContext context) {}` 中通過 `final meals = ref.watch(mealsProvider);` 獲取 meals 即可。
+
+#### 與其他 provider 進行交互並回傳數據
+
+每個 provider 之間可通過 ref 互相交互，比如 filterMeals 就需要通過 meals 進行過濾後獲取結果：
+
+```dart
+final filterMealsProvider = Provider((ref) {
+  final meals = ref.watch(mealsProvider); // 獲取 meals
+
+  return meals.where((meal) { // 過濾 meals
+    if (!meal.isGlutenFree && selectedFilter[Filter.glutenFree]!) {
+      return false;
+    }
+    if (!meal.isLactoseFree && selectedFilter[Filter.lactoseFree]!) {
+      return false;
+    }
+    if (!meal.isVegan && selectedFilter[Filter.vegan]!) {
+      return false;
+    }
+    if (!meal.isVegetarian && selectedFilter[Filter.vegetarian]!) {
+      return false;
+    }
+    return true;
+  }).toList();
+});
+```
+
+接著即可在 `tabs_screen.dart` 中通過 `final filterMeals = ref.watch(filterMealsProvider);` 獲取 filterMeals 的資料。
+
+### StateNotifierProvider 方法
+
+以 favoriteMeals 來說，除了需要提供喜好項目列表外，還需要提供變更喜好狀態的方法，以及獲取當前喜好狀態等，要用更複雜的方式處理：
+
+```dart
+class FavoriteMealsNotifier extends StateNotifier<List<Meal>> { // 通過 extends StateNotifier 建立 FavoriteMealsNotifier class
+  FavoriteMealsNotifier() : super([]); // 用 : super() 設置預設值為 []
+
+  bool toggleFavo(Meal meal) { // 宣告變更喜好狀態的方法，回傳布林值以供判斷顯示的提示為刪除或添加
+    if (state.contains(meal)) { // state 即為 favoriteMeals，通過 contains() 方法判斷是否已有 meal
+      state = state.where((element) => element.id != meal.id).toList(); // 使用 state = ... 的方式重新賦值
+      return false; // 回傳非增加
+    } else {
+      state = [...state, meal]; // 通過解構方式添加 meal
+      return true; // 回傳是增加
+    }
+  }
+}
+
+final favoriteMealsProvider = StateNotifierProvider<FavoriteMealsNotifier, List<Meal>>( // 通過 StateNotifierProvider 回傳 FavoriteMealsNotifier
+  (ref) {
+    return FavoriteMealsNotifier();
+  },
+);
+```
+
+接著在 `tabs_screen.dart` 中就可以透過 `final favoMeals = ref.watch(favoriteMealsProvider);` 獲取喜愛項目的數據傳遞到 `MealsScreen()` 中了。
+
+另外在 `MealScreen()` 中的右上角原本有切換喜好項目用的按鈕，可以將其單獨拉出來做成有狀態小部件，再通過 `favoriteMealsProvider` 獲取方法來切換喜好項目、愛心 icon：
+
+```dart
+class MealFavoriteButton extends ConsumerStatefulWidget {// 將有狀態小部件改為 ConsumerStatefulWidget
+  const MealFavoriteButton(this.meal, {super.key});
+  final Meal meal; // 從 MealScreen 中傳入當前的 meal
+
+  @override
+  ConsumerState<MealFavoriteButton> createState() => _MealFavoriteButtonState();
+}
+
+class _MealFavoriteButtonState extends ConsumerState<MealFavoriteButton> {
+  @override
+  Widget build(BuildContext context) {
+    // 獲取 favoriteMeals
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
+    
+    return IconButton(
+      onPressed: () {
+        // 通過 ref.read(favoriteMealsProvider.notifier) 呼叫使用 toggleFavo 方法
+        final isAddFavo = ref.read(favoriteMealsProvider.notifier).toggleFavo(widget.meal);
+
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(isAddFavo ? '已將食譜${widget.meal.title}添加到喜好項目。' : '已將食譜${widget.meal.title}從喜好項目中移除。'),
+          ),
+        );
+      },
+      // 判斷 favoriteMeals 中是否已有 meal 切換愛心 icon
+      icon: Icon(favoriteMeals.contains(widget.meal) ? Icons.favorite : Icons.favorite_border),
+    );
+  }
+}
+```
+
+## 進階 - 使用 supabase 獲取分類資料
+
+### 安裝與初始化
+
+先到 supabase 開一個新專案，並為分類建立好 table ，欄位 id(type text) 、 title(type text) 、 color(type bigint)。
+
+> 通過 `Colors.red.value` 可獲取純數字格式的顏色，使用時則通過 `Color(4282339765)` 即可。
+
+執行指令 `flutter pub add supabase_flutter` 以進行安裝。
+
+安裝好後，修改 `main.dart` 內容，以初始化 `supabase_flutter`：
+
+```dart
+import 'package:supabase_flutter/supabase_flutter.dart'; // 引入 supabase_flutter
+
+Future<void> main() async {
+  await Supabase.initialize(
+    url: 'your url here',
+    anonKey: 'your key here',
+  );
+  runApp(const ProviderScope(child: MyApp()));
+}
+```
+
+接著即可開始使用。
+
+### 通過 Future 獲取資料
+
+在 `categories_screen.dart` 中，將所有小部件用 `FutureBuilder` 包裹住，並設置其 `future` 及 `builder` 函數：
+
+```dart
+import 'package:supabase_flutter/supabase_flutter.dart' as supabase; // 引入 supabase ，設置別稱為 supabase 否則會跟 flutter_riverpod 衝突
+
+final _supabase = supabase.Supabase.instance.client; // 宣告 _supabase
+
+FutureBuilder( // 最外層用 FutureBuilder 小部件
+  future: _supabase.from('categories').select(), // 用 supabase 提供的方法，獲取 table 中 categories 的資料
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) { // 判斷是否還在載入中
+      return const Center(child: CircularProgressIndicator()); // 顯示圓形 loading 小部件
+    } else {
+      if (snapshot.error != null) { // 判斷是否有錯
+        return const Center(
+          child: Text('Something wrong...'),
+        );
+      } else { // 顯示原本的小部件
+        return GridView(
+          padding: const EdgeInsets.all(20),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.75,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          children: [
+            for (final c in snapshot.data) // 用 snapshot.data 來獲取拿到的 categories 資料
+              CategoryGridItem(
+                c['title'], // c.title 改為 c['title']
+                Color(c['color']), // c.color 改為 Color(c['color'])
+                () => _selectedCategory(context, Category(c['id'], c['title'], Color(c['color']))), // 原本傳入 c 改為傳入完整的 Category 物件
+              )
+          ],
+        );
+      }
+    }
+  },
+);
+```

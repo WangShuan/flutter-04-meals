@@ -1,90 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../data/dummy_categories.dart';
+import '../providers/favorites_provider.dart';
+import '../providers/filters_provider.dart';
 import '../widgets/main_drawer.dart';
-import '../models/meal.dart';
 import './categories_screen.dart';
 import './filters_screen.dart';
 import './meals_screen.dart';
 
-class TabsScreen extends StatefulWidget {
+class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() => _TabsScreenState();
+  ConsumerState<TabsScreen> createState() => _TabsScreenState();
 }
 
-class _TabsScreenState extends State<TabsScreen> {
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _activeIndex = 0;
-
-  Map<Filter, bool> _selectedFilter = {
-    Filter.glutenFree: false,
-    Filter.lactoseFree: false,
-    Filter.vegan: false,
-    Filter.vegetarian: false,
-  };
-
-  void _showMessage(String msg) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
-
-  final List<Meal> _favoMeals = [];
-  void toggleFavo(Meal meal) {
-    if (_favoMeals.contains(meal)) {
-      setState(() {
-        _favoMeals.remove(meal);
-      });
-      _showMessage('已將食譜${meal.title}從喜好項目中移除。');
-    } else {
-      setState(() {
-        _favoMeals.add(meal);
-      });
-      _showMessage('已將食譜${meal.title}添加到喜好項目中。');
-    }
-  }
 
   void selectedScreen(String routeName) async {
     Navigator.of(context).pop();
     if (routeName == 'filters') {
-      final filters = (await Navigator.of(context).push<Map<Filter, bool>>(
+      await Navigator.of(context).push<Map<Filter, bool>>(
         MaterialPageRoute(
-          builder: (context) => FiltersScreen(_selectedFilter),
+          builder: (context) => const FiltersScreen(),
         ),
-      ))!;
-
-      setState(() {
-        _selectedFilter = filters;
-      });
+      );
     } else {
+      final filterMeals = ref.watch(filterMealsProvider);
+
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MealsScreen('所有食譜', meals, toggleFavo),
+        builder: (context) => MealsScreen('所有食譜', filterMeals),
       ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Meal> filterMeals = meals.where((meal) {
-      if (!meal.isGlutenFree && _selectedFilter[Filter.glutenFree]!) {
-        return false;
-      }
-      if (!meal.isLactoseFree && _selectedFilter[Filter.lactoseFree]!) {
-        return false;
-      }
-      if (!meal.isVegan && _selectedFilter[Filter.vegan]!) {
-        return false;
-      }
-      if (!meal.isVegetarian && _selectedFilter[Filter.vegetarian]!) {
-        return false;
-      }
-      return true;
-    }).toList();
+    final favoMeals = ref.watch(favoriteMealsProvider);
+    final filterMeals = ref.watch(filterMealsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -104,7 +58,7 @@ class _TabsScreenState extends State<TabsScreen> {
         currentIndex: _activeIndex,
         selectedItemColor: Theme.of(context).colorScheme.primary,
       ),
-      body: _activeIndex == 0 ? CategoriesScreen(filterMeals, toggleFavo) : MealsScreen('', _favoMeals, toggleFavo),
+      body: _activeIndex == 0 ? CategoriesScreen(filterMeals) : MealsScreen('', favoMeals),
     );
   }
 }
