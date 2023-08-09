@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 import '../models/category.dart';
@@ -9,7 +8,7 @@ import './meals_screen.dart';
 
 final _supabase = supabase.Supabase.instance.client;
 
-class CategoriesScreen extends ConsumerWidget {
+class CategoriesScreen extends StatelessWidget {
   const CategoriesScreen(this.meals, {super.key});
   final List<Meal> meals;
 
@@ -21,7 +20,7 @@ class CategoriesScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return FutureBuilder(
         future: _supabase.from('categories').select(),
         builder: (context, snapshot) {
