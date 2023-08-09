@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 import '../models/category.dart';
@@ -9,20 +8,46 @@ import './meals_screen.dart';
 
 final _supabase = supabase.Supabase.instance.client;
 
-class CategoriesScreen extends ConsumerWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen(this.meals, {super.key});
   final List<Meal> meals;
 
+  @override
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
+
+class _CategoriesScreenState extends State<CategoriesScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+    super.initState();
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   void _selectedCategory(BuildContext context, Category category) {
-    final List<Meal> mealsByCategory = meals.where((m) => m.categories.contains(category.id)).toList();
+    final List<Meal> mealsByCategory = widget.meals.where((m) => m.categories.contains(category.id)).toList();
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => MealsScreen(category.title, mealsByCategory),
     ));
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return FutureBuilder(
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      child: FutureBuilder(
         future: _supabase.from('categories').select(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -52,6 +77,20 @@ class CategoriesScreen extends ConsumerWidget {
               );
             }
           }
-        });
+        },
+      ),
+      // builder: (context, child) {
+      //   return Opacity(
+      //     opacity: _animationController.value,
+      //     child: child,
+      //   );
+      // },
+      builder: (context, child) {
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: _animationController, curve: Curves.easeInOutBack),
+          child: child,
+        );
+      },
+    );
   }
 }

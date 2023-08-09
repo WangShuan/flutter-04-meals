@@ -16,6 +16,7 @@ class _MealFavoriteButtonState extends ConsumerState<MealFavoriteButton> {
   @override
   Widget build(BuildContext context) {
     final favoriteMeals = ref.watch(favoriteMealsProvider);
+    final isFavo = favoriteMeals.contains(widget.meal);
     return IconButton(
       onPressed: () {
         final isAddFavo = ref.read(favoriteMealsProvider.notifier).toggleFavo(widget.meal);
@@ -27,7 +28,19 @@ class _MealFavoriteButtonState extends ConsumerState<MealFavoriteButton> {
           ),
         );
       },
-      icon: Icon(favoriteMeals.contains(widget.meal) ? Icons.favorite : Icons.favorite_border),
+      icon: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: Icon(
+          isFavo ? Icons.favorite : Icons.favorite_border,
+          key: ValueKey(isFavo),
+        ),
+        transitionBuilder: (child, animation) {
+          return ScaleTransition(
+            scale: Tween(begin: 1.25, end: 1.0).animate(CurvedAnimation(parent: animation, curve: Curves.easeIn)),
+            child: child,
+          );
+        },
+      ),
     );
   }
 }

@@ -753,3 +753,93 @@ FutureBuilder( // 最外層用 FutureBuilder 小部件
   },
 );
 ```
+
+## 進階 - 添加動畫過場效果
+
+動畫區分為顯性與隱性兩種，一種是自定義動畫，另一種則是使用 flutter 提供的各種小部件來實現，將大量部分交給 flutter 做管理及運算。
+
+### 顯性
+
+要使用顯性動畫，需要先將小部件轉為有狀態小部件，接著宣告 animationController 以獲取每一幀的值，且與 textController 一樣，須通過 dispose() 摧毀控制器，以避免佔用內存。
+
+主要程式碼如下：
+
+```dart
+// 使用 with SingleTickerProviderStateMixin 以獲取 AnimationController 中 vsync 要用的 TickerProvider
+class _CategoriesScreenState extends State<CategoriesScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController; // 用 late 宣告在稍後使用時才被賦值的 _animationController
+
+  @override
+  void initState() { // 通過 initState 設置 _animationController 的值
+    _animationController = AnimationController(
+      vsync: this, // 利用 with SingleTickerProviderStateMixin 獲取到的 this
+      duration: const Duration(milliseconds: 800), // 設置動畫時長 800 毫秒
+    );
+    super.initState();
+
+    _animationController.forward(); // 讓動畫往前執行
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose(); // 摧毀動畫
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder( // 用 AnimatedBuilder 包住小部件
+      animation: _animationController, // 設置動畫控制器
+      child: // 將原本的小部件你內容全放在這，避免執行動畫時每幀重置 UI
+      builder: (context, child) {
+        return Opacity( // 通過 Opacity 小部件 讓所有內容淡入
+          opacity: _animationController.value,
+          child: child,
+        );
+      },
+      // 也可用 FadeTransition 小部件，搭配 CurvedAnimation 設置淡入淡出過場的曲線類型
+      // builder: (context, child) {
+      //   return FadeTransition( 
+      //     opacity: CurvedAnimation(parent: _animationController, curve: Curves.easeInOutBack),
+      //     child: child,
+      //   );
+      // },
+    );
+  }
+}
+```
+
+### 隱性
+
+以加入喜好項目按鈕來說，可以在切換圖標時製作動畫效果：
+
+```dart
+icon: AnimatedSwitcher( // 將 icon 小部件用 AnimatedSwitcher 包住
+  duration: const Duration(milliseconds: 300), // 設置動畫時長
+  child: Icon( // 將原本的 icon 設為 child，並給上 key 值(否則 flutter 會認為小部件沒變化而無法執行動畫)
+    isFavo ? Icons.favorite : Icons.favorite_border,
+    key: ValueKey(isFavo),
+  ),
+  transitionBuilder: (child, animation) { // 設置動畫內容
+    return ScaleTransition( // 使用 ScaleTransition 小部件讓動畫的效果為放大、縮小
+      scale: Tween(begin: 1.25, end: 1.0).animate(CurvedAnimation(parent: animation, curve: Curves.easeIn)),
+      child: child,
+    );
+  },
+),
+```
+
+另外在上面曾提及的新小部件中， `Hero` 小部件也屬於隱性動畫之一，當兩個不同屏幕中出現相同小部件時，可用 `Hero` 小部件包裹，這樣在切換兩個屏幕時即可透過 `Hero` 小部件產生動畫過場，比如在 `meal_item.dart` 與 `meal_screen.dart` 中擁有相同的圖片小部件，就可以這樣做：
+
+```dart
+Hero( // 用 Hero 小部件包裹住相同小部件
+  tag: meal.id, // 設置辨識用的唯一 tag
+  child: FadeInImage.memoryNetwork( // 相同小部件
+    placeholder: kTransparentImage,
+    image: meal.imgUrl,
+    width: double.infinity,
+    height: 300,
+    fit: BoxFit.cover,
+  ),
+)
+```
