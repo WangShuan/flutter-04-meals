@@ -18,7 +18,6 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-
   @override
   void initState() {
     _animationController = AnimationController(
@@ -43,12 +42,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> with SingleTickerPr
     ));
   }
 
+  final _stream = _supabase.from('categories').stream(primaryKey: ['id']);
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animationController,
-      child: FutureBuilder(
-        future: _supabase.from('categories').select(),
+      child: StreamBuilder(
+        stream: _stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -67,7 +68,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> with SingleTickerPr
                   mainAxisSpacing: 20,
                 ),
                 children: [
-                  for (final c in snapshot.data)
+                  for (final c in snapshot.data!)
                     CategoryGridItem(
                       c['title'],
                       Color(c['color']),

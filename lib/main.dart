@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import './screens/tabs_screen.dart';
 
-Future<void> main() async {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
+
   await Supabase.initialize(
     url: 'https://bvhbftzgkqdrvhnqvgml.supabase.co',
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2aGJmdHpna3FkcnZobnF2Z21sIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTEwNjQxNDUsImV4cCI6MjAwNjY0MDE0NX0.Qraq7NFrTtss7uJXwZ4ztP5GzLi21gVKm8a2evjXrB4',
+    anonKey: FlutterConfig.get('SUPABASE_KEY'),
   );
+
   runApp(const ProviderScope(child: MyApp()));
 }
+
+final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

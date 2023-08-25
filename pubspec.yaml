@@ -39,6 +39,7 @@ dependencies:
   transparent_image: ^2.0.1
   supabase_flutter: ^1.10.11
   flutter_riverpod: ^2.3.6
+  flutter_config: ^2.0.2
 
 dev_dependencies:
   flutter_test:

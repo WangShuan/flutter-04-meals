@@ -27,10 +27,21 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         ),
       );
     } else {
-      final filterMeals = ref.watch(filterMealsProvider);
-
       Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => MealsScreen('所有食譜', filterMeals),
+        builder: (context) => FutureBuilder(
+            future: ref.watch(filterMealsProvider),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                return MealsScreen('所有食譜', snapshot.data!);
+              } else {
+                return const Center(
+                  child: Text('no meals.'),
+                );
+              }
+            }),
       ));
     }
   }
@@ -38,7 +49,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
   @override
   Widget build(BuildContext context) {
     final favoMeals = ref.watch(favoriteMealsProvider);
-    final filterMeals = ref.watch(filterMealsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +68,22 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         currentIndex: _activeIndex,
         selectedItemColor: Theme.of(context).colorScheme.primary,
       ),
-      body: _activeIndex == 0 ? CategoriesScreen(filterMeals) : MealsScreen('', favoMeals),
+      body: _activeIndex == 0
+          ? FutureBuilder(
+              future: ref.watch(filterMealsProvider),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return CategoriesScreen(snapshot.data!);
+                } else {
+                  return const Center(
+                    child: Text('no meals.'),
+                  );
+                }
+              })
+          : MealsScreen('', favoMeals),
     );
   }
 }
